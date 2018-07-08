@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Button from './Button';
-import { withModalProvider } from './ModalContainer';
+import { ModalProvider } from './ModalContainer';
 import './style.css';
 
 class App extends Component {
   render() {
     return (
-      <div>
+      <ModalProvider>
         <Button />
-      </div>
+      </ModalProvider>
     );
   }
 }
 
-const ConnectedApp = withModalProvider(App);
-
-render(<ConnectedApp />, document.getElementById('root'));
+render(<App />, document.getElementById('root'));

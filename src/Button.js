@@ -1,13 +1,17 @@
 import React from 'react';
 
-import { withModalConsumer } from './ModalContainer';
+import { ModalContext } from './ModalContainer';
 
-const Button = ({ openModal }) => (
-  <button
-    onClick={openModal}
-  >
-    Open Modal
-  </button>
-)
+const Button = () => (
+  <ModalContext.Consumer>
+    {({ openModal }) => (
+      <button
+        onClick={openModal}
+      >
+        Open Modal
+    </button>
+    )}
+  </ModalContext.Consumer>
+);
 
-export default withModalConsumer(Button);
+export default Button;

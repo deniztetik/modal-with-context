@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const ModalContext = React.createContext();
+export const ModalContext = React.createContext();
 
 const state = {
   isOpen: false,
@@ -11,7 +11,7 @@ const actions = new Map([
   ['closeModal', { isOpen: false }],
 ]);
 
-export const ExtraComponent = ({ isOpen, closeModal }) => (
+export const ModalComponent = ({ isOpen, closeModal }) => (
   isOpen ?
     <div id='app-modal'>
       <div id='app-modal__content'>
@@ -24,8 +24,8 @@ export const ExtraComponent = ({ isOpen, closeModal }) => (
       </div>
     </div> : null
 );
- 
-const createModalProvider = (actionTuples) => (state) => (ExtraComponent) => (WrappedComponent) => {
+
+const createContextProvider = (state) => (actionTuples) => (ExtraComponent) => {
   return class extends Component {
     state = state;
 
@@ -51,7 +51,7 @@ const createModalProvider = (actionTuples) => (state) => (ExtraComponent) => (Wr
     render() {
       return (
         <ModalContext.Provider value={this.buildContextStateAndActions()}>
-          <WrappedComponent {...this.props} />
+          {this.props.children}
           {ExtraComponent ? <ExtraComponent {...this.buildContextStateAndActions()} /> : null}
         </ModalContext.Provider>
       );
@@ -59,15 +59,4 @@ const createModalProvider = (actionTuples) => (state) => (ExtraComponent) => (Wr
   }
 }
 
-export const withModalProvider = createModalProvider(actions)(state)(ExtraComponent);
-
-export const withModalConsumer = (WrappedComponent) =>
-  (props) => {
-    return (
-      <ModalContext.Consumer>
-        {contextProps => (
-          <WrappedComponent {...contextProps} {...props} />
-        )}
-      </ModalContext.Consumer>
-    );
-  }
+export const ModalProvider = createContextProvider(state)(actions)(ModalComponent);
